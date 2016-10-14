@@ -73,9 +73,10 @@ public class Client {
 
 	private static void dir(String path, Service.Client client) throws TException {
 		List<Data> fileList = client.dir(path);
-		System.out.println();
+		System.out.format("%22s %11s %28s %28s\n", "Name", "Size", "Last Modified", "Created At");
 		for (Data data : fileList) {
-			System.out.println(data.name + "\t" + data.size + " bytes\t" + new Date(data.lastModifiedDate) + "\t" + new Date(data.createdDate));
+			System.out.format("%22s %8d KB ", data.name, data.size/1024);
+			System.out.println(new Date(data.lastModifiedDate) + "\t" + new Date(data.createdDate));
 		}
 	}
 
@@ -114,6 +115,7 @@ public class Client {
 			File f = new File(localPath + name);
 			FileChannel channel = FileChannel.open(f.toPath());
 			data.buffer = ByteBuffer.allocate((int) channel.size());
+			data.size = channel.size();
 			channel.read(data.buffer);
 			data.buffer.flip();
 			channel.close();

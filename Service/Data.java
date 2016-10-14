@@ -51,7 +51,7 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
   }
 
   public String name; // optional
-  public long size; // optional
+  public long size; // required
   public long lastModifiedDate; // required
   public long createdDate; // required
   public ByteBuffer buffer; // optional
@@ -131,13 +131,13 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
   private static final int __LASTMODIFIEDDATE_ISSET_ID = 1;
   private static final int __CREATEDDATE_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
-  private static final _Fields optionals[] = {_Fields.NAME,_Fields.SIZE,_Fields.BUFFER};
+  private static final _Fields optionals[] = {_Fields.NAME,_Fields.BUFFER};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.NAME, new org.apache.thrift.meta_data.FieldMetaData("name", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.SIZE, new org.apache.thrift.meta_data.FieldMetaData("size", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+    tmpMap.put(_Fields.SIZE, new org.apache.thrift.meta_data.FieldMetaData("size", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     tmpMap.put(_Fields.LAST_MODIFIED_DATE, new org.apache.thrift.meta_data.FieldMetaData("lastModifiedDate", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
@@ -153,10 +153,13 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
   }
 
   public Data(
+    long size,
     long lastModifiedDate,
     long createdDate)
   {
     this();
+    this.size = size;
+    setSizeIsSet(true);
     this.lastModifiedDate = lastModifiedDate;
     setLastModifiedDateIsSet(true);
     this.createdDate = createdDate;
@@ -431,8 +434,8 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
         return false;
     }
 
-    boolean this_present_size = true && this.isSetSize();
-    boolean that_present_size = true && that.isSetSize();
+    boolean this_present_size = true;
+    boolean that_present_size = true;
     if (this_present_size || that_present_size) {
       if (!(this_present_size && that_present_size))
         return false;
@@ -479,7 +482,7 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
     if (present_name)
       list.add(name);
 
-    boolean present_size = true && (isSetSize());
+    boolean present_size = true;
     list.add(present_size);
     if (present_size)
       list.add(size);
@@ -589,12 +592,10 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
       }
       first = false;
     }
-    if (isSetSize()) {
-      if (!first) sb.append(", ");
-      sb.append("size:");
-      sb.append(this.size);
-      first = false;
-    }
+    if (!first) sb.append(", ");
+    sb.append("size:");
+    sb.append(this.size);
+    first = false;
     if (!first) sb.append(", ");
     sb.append("lastModifiedDate:");
     sb.append(this.lastModifiedDate);
@@ -619,6 +620,7 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
 
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
+    // alas, we cannot check 'size' because it's a primitive and you chose the non-beans generator.
     // alas, we cannot check 'lastModifiedDate' because it's a primitive and you chose the non-beans generator.
     // alas, we cannot check 'createdDate' because it's a primitive and you chose the non-beans generator.
     // check for sub-struct validity
@@ -708,6 +710,9 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
       iprot.readStructEnd();
 
       // check for required fields of primitive type, which can't be checked in the validate method
+      if (!struct.isSetSize()) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'size' was not found in serialized data! Struct: " + toString());
+      }
       if (!struct.isSetLastModifiedDate()) {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'lastModifiedDate' was not found in serialized data! Struct: " + toString());
       }
@@ -728,11 +733,9 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
           oprot.writeFieldEnd();
         }
       }
-      if (struct.isSetSize()) {
-        oprot.writeFieldBegin(SIZE_FIELD_DESC);
-        oprot.writeI64(struct.size);
-        oprot.writeFieldEnd();
-      }
+      oprot.writeFieldBegin(SIZE_FIELD_DESC);
+      oprot.writeI64(struct.size);
+      oprot.writeFieldEnd();
       oprot.writeFieldBegin(LAST_MODIFIED_DATE_FIELD_DESC);
       oprot.writeI64(struct.lastModifiedDate);
       oprot.writeFieldEnd();
@@ -763,24 +766,19 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
     @Override
     public void write(org.apache.thrift.protocol.TProtocol prot, Data struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
+      oprot.writeI64(struct.size);
       oprot.writeI64(struct.lastModifiedDate);
       oprot.writeI64(struct.createdDate);
       BitSet optionals = new BitSet();
       if (struct.isSetName()) {
         optionals.set(0);
       }
-      if (struct.isSetSize()) {
+      if (struct.isSetBuffer()) {
         optionals.set(1);
       }
-      if (struct.isSetBuffer()) {
-        optionals.set(2);
-      }
-      oprot.writeBitSet(optionals, 3);
+      oprot.writeBitSet(optionals, 2);
       if (struct.isSetName()) {
         oprot.writeString(struct.name);
-      }
-      if (struct.isSetSize()) {
-        oprot.writeI64(struct.size);
       }
       if (struct.isSetBuffer()) {
         oprot.writeBinary(struct.buffer);
@@ -790,20 +788,18 @@ public class Data implements org.apache.thrift.TBase<Data, Data._Fields>, java.i
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, Data struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
+      struct.size = iprot.readI64();
+      struct.setSizeIsSet(true);
       struct.lastModifiedDate = iprot.readI64();
       struct.setLastModifiedDateIsSet(true);
       struct.createdDate = iprot.readI64();
       struct.setCreatedDateIsSet(true);
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(2);
       if (incoming.get(0)) {
         struct.name = iprot.readString();
         struct.setNameIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.size = iprot.readI64();
-        struct.setSizeIsSet(true);
-      }
-      if (incoming.get(2)) {
         struct.buffer = iprot.readBinary();
         struct.setBufferIsSet(true);
       }

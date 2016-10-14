@@ -24,7 +24,7 @@ public class Handler implements Service.Iface {
 		if (!path.equals(""))
 			dir = new File(path);
 		else
-			dir = new File("/");
+			dir = new File(File.separator);
 
 		List<Data> fileList = new ArrayList<Data>();
 
@@ -55,7 +55,7 @@ public class Handler implements Service.Iface {
 	@Override
 	public String createDir(String path, String name) throws TException {
 		File f = new File(path);
-		if (!f.exists() || !path.substring(path.length()-1).equals("/")) {
+		if (!f.exists() || !path.substring(path.length()-1).equals(File.separator)) {
 			return "Path doesn't exist";
 		}
 		else {
@@ -83,6 +83,7 @@ public class Handler implements Service.Iface {
 
 				FileChannel channel = FileChannel.open(f.toPath());
 				data.buffer = ByteBuffer.allocate((int) channel.size());
+				data.size = channel.size();
 				channel.read(data.buffer);
 				data.buffer.flip();
 				channel.close();

@@ -2,7 +2,7 @@ namespace java Service
 
 struct Data {
 	1: optional string name;
-	2: optional i64 size;
+	2: required i64 size;
 	3: required i64 lastModifiedDate;
 	4: required i64 createdDate;
 	5: optional binary buffer;
